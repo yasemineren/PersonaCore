@@ -68,7 +68,7 @@ export default function Home() {
   async function loadDetail(id: string) {
     setError("");
     setSelected(id);
-    const res = await fetch(`http://localhost:8000/v1/conversations/${id}`);
+    const res = await fetch(`https://reimagined-tribble-pq7p6gw56xwhrpvv-8000.app.github.dev/chat);
     const data = await res.json();
     setDetail(data);
   }
