@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Any
 
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 from app.core.persona import FONIFY_EMPLOYEE_V1
 from app.core.state_store import state_store
@@ -11,7 +11,7 @@ from app.services.drift import persona_drift_score
 
 
 class Orchestrator:
-    async def handle_message(self, contact_id: str, channel: str, text: str, openai_api_key: str) -> dict[str, Any]:
+    async def handle_message(self, contact_id: str, channel: str, text: str, gemini_api_key: str) -> dict[str, Any]:
         state = state_store.get_or_create(contact_id)
         state.last_channel = channel
 
@@ -28,7 +28,7 @@ class Orchestrator:
             )
         )
 
-        retrieved = search_long_term(openai_api_key, contact_id, text, k=4)
+        retrieved = search_long_term(gemini_api_key, contact_id, text, k=4)
         state.trace.append(
             TraceEvent(
                 agent="ContextManagerAgent",
@@ -38,10 +38,14 @@ class Orchestrator:
         )
 
         prompt = self._build_prompt(channel=channel, text=text, retrieved=retrieved)
-        llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.35, openai_api_key=openai_api_key)
+        llm = ChatGoogleGenerativeAI(
+            model="gemini-2.5-flash",
+            temperature=0.35,
+            google_api_key=gemini_api_key,
+        )
         reply = (await llm.ainvoke(prompt)).content
 
-        score = await persona_drift_score(openai_api_key, reply)
+        score = await persona_drift_score(gemini_api_key, reply)
         state.drift_score = score
         drift_detected = score < 75
         state.trace.append(
@@ -71,7 +75,7 @@ class Orchestrator:
             )
         )
 
-        doc_id = write_long_term(openai_api_key, contact_id, f"User ({channel}) said: {text}", kind="history")
+        doc_id = write_long_term(gemini_api_key, contact_id, f"User ({channel}) said: {text}", kind="history")
         if doc_id not in state.memory.long_term_keys:
             state.memory.long_term_keys.append(doc_id)
         state.trace.append(

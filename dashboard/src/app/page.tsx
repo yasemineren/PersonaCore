@@ -52,7 +52,7 @@ export default function Home() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-OPENAI-KEY": apiKey.trim(),
+          "X-GEMINI-KEY": apiKey.trim(),
         },
         body: JSON.stringify({ contact_id: contactId.trim(), channel, text: text.trim() }),
       });
@@ -83,12 +83,12 @@ export default function Home() {
 
           <form onSubmit={onSubmit} className="mt-6 grid gap-4">
             <label className="grid gap-1 text-sm">
-              OpenAI API Key (yalnızca bu oturum için)
+              Gemini API Key (yalnızca bu oturum için)
               <input
                 type="password"
                 value={apiKey}
                 onChange={(e) => setApiKey(e.target.value)}
-                placeholder="sk-..."
+                placeholder="AIza..."
                 className="rounded-md border border-slate-600 bg-slate-800 px-3 py-2 outline-none ring-cyan-400 focus:ring"
               />
             </label>
