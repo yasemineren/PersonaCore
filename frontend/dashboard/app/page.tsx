@@ -48,14 +48,14 @@ export default function Home() {
   const [toast, setToast] = useState<string>("");
 
   useEffect(() => {
-    const saved = localStorage.getItem("OPENAI_API_KEY") || "";
+    const saved = localStorage.getItem("GEMINI_API_KEY") || "";
     setApiKey(saved);
     if (!saved) setShowKeyModal(true);
   }, []);
 
   function saveKey(v: string) {
     setApiKey(v);
-    localStorage.setItem("OPENAI_API_KEY", v);
+    localStorage.setItem("GEMINI_API_KEY", v);
   }
 
   async function loadConversations() {
@@ -96,7 +96,7 @@ export default function Home() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-OPENAI-KEY": apiKey,
+          "X-GEMINI-KEY": apiKey,
         },
         body: JSON.stringify({ contact_id: contactId, channel, text }),
       });

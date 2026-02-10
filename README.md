@@ -83,7 +83,7 @@ npm run dev
 ```
 
 ## API key policy
-OpenAI API key is **not hardcoded in code**. The dashboard asks for key input at runtime and sends it in `X-OPENAI-KEY` header per request.
+Gemini API key is **not hardcoded in code**. The dashboard asks for key input at runtime and sends it in `X-GEMINI-KEY` header per request.
 
 ## Quick demo flow
 1. Send first message with `contact_id=customer-001` via `/call`.

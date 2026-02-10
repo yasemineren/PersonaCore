@@ -1,8 +1,12 @@
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 from app.core.persona import FONIFY_EMPLOYEE_V1
 
-async def persona_drift_score(openai_api_key: str, reply: str) -> float:
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, openai_api_key=openai_api_key)
+async def persona_drift_score(gemini_api_key: str, reply: str) -> float:
+    llm = ChatGoogleGenerativeAI(
+        model="gemini-2.5-flash",
+        temperature=0,
+        google_api_key=gemini_api_key,
+    )
 
     prompt = f"""
 You are a strict evaluator. Score the assistant reply from 0 to 100 for compliance.
